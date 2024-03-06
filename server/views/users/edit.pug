@@ -1,0 +1,12 @@
+extends ../layouts/application.pug
+
+block header
+  = t('views.edit.edit')
+
+block content
+  +formFor()(action=`/users/${user.id}` method="post")
+    +input(user, t('views.edit.firstname'), errors)(type="text" placeholder=t('views.edit.firstname'))
+    +input(user, t('views.edit.lastname'), errors)(type="text", placeholder=t('views.edit.lastname'))
+    +input(user, t('views.edit.email'), errors)(type="text", placeholder=t('views.edit.email'))
+    +input(user, t('views.edit.password'), errors)(type="password", placeholder=t('views.edit.password'))
+    +submit(user)(value=t('views.edit.submit'))

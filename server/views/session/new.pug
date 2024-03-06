@@ -1,0 +1,15 @@
+extends ../layouts/application.pug
+
+block header
+  = t('views.session.new.signIn')
+
+block content
+  .row.justify-content-center.mt-4
+    .col-12.col-md-8
+      .card.shadow-sm
+        .card-body.row.p-5
+          .mt-3.mt-mb-0
+            +formFor()(action=route('session') method='post')
+              +input(signInForm, t('views.session.new.email'), errors)(type="text", placeholder=t('views.session.new.email'))
+              +input(signInForm, t('views.session.new.password'))(type="password", placeholder=t('views.session.new.password'))
+              +submit(signInForm)(value=t('views.session.new.submit'))

@@ -1,0 +1,47 @@
+extends ../layouts/application.pug
+
+block header
+  = t('views.tasks.tasks')
+
+block content
+  a.btn.btn-primary.mb-5(href=route('newTask'))= t('views.tasks.create')
+  .card.shadow-sm
+    .card-body.p-4
+      form()(action='/tasks' method='get')
+        .row
+          +filterTasks(statuses, values.status, 'status', t('views.tasks.status'))
+          +filterTasks(executors, values.executor, 'executor', t('views.tasks.executor'))
+          +filterTasks(labels, values.label, 'label', t('views.tasks.label')) 
+
+        .mb-3.form-check
+          if values.creator 
+            input#data_isCreatorUser.form-check-input(type='checkbox' name='isCreatorUser' checked)
+            label.form-check-label(for='data_isCreatorUser')= t('views.tasks.own')
+          else
+            input#data_isCreatorUser.form-check-input(type='checkbox' name='isCreatorUser')
+            label.form-check-label(for='data_isCreatorUser')= t('views.tasks.own')
+        +submit()(value=t('views.tasks.show')).ml-3
+
+  .table-responsive
+    table.table.table-borderless.table-striped.mt-5.bg-white
+      thead
+        tr
+          th= t('views.tasks.id')
+          th= t('views.tasks.name')
+          th= t('views.tasks.status')
+          th= t('views.tasks.author')
+          th= t('views.tasks.executor')
+          th= t('views.tasks.createdAt')
+      tbody
+        each task in tasks
+          tr
+            td= task.id
+            td= a(href=`/tasks/${task.id}`)=  _.get(task, 'name', '')
+            td= _.get(task, ['status', 'name'], '')
+            td= `${_.get(task, ['creator', 'firstName'], '')} ${_.get(task, ['creator', 'lastName'], '')}`
+            td= `${_.get(task, ['executor', 'firstName'], '')} ${_.get(task, ['executor', 'lastName'], '')}`
+            td= formatDate(task.createdAt)
+            td
+              .d-flex
+                a.btn.btn-primary.me-1(href=`/tasks/${task.id}/edit`)= t('views.tasks.submit')
+                +buttonTo(`/tasks/${task.id}`, 'delete')(value=t('views.tasks.delete') class="btn btn-danger")

@@ -1,0 +1,24 @@
+extends ../layouts/application.pug
+
+block header
+  = t('views.statuses.statuses')
+
+block content
+  a.btn.btn-primary(href=route('newStatus'))= t('views.statuses.createStatus')
+  .table-responsive
+    table.table.table-borderless.table-striped.mt-5.bg-white
+      thead
+        tr
+          th= t('views.statuses.id')
+          th= t('views.statuses.name')
+          th= t('views.statuses.createdAt')
+      tbody
+        each status in statuses
+          tr
+            td= status.id
+            td= status.name
+            td= formatDate(status.createdAt)
+            td
+              .d-flex
+                a.btn.btn-primary.me-1(href=`/statuses/${status.id}/edit`)= t('views.statuses.edit.submit')
+                +buttonTo(`/statuses/${status.id}`, 'delete')(value=t('views.statuses.delete') class="btn btn-danger")
